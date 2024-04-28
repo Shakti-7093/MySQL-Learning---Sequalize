@@ -1,0 +1,33 @@
+{
+  "name": "1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "required": "npm install --save-dev sequelize-cli && npm i --save sequelize && npx sequelize-cli init && npm i mysql2",
+    "migration": "npx sequelize db:migrate",
+    "create-users-table": "npx sequelize-cli model:generate --name Users --attributes name:string,email:string,password:string,username:string,role:string",
+    "start:test": "node index.js",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.9.7",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^3.1.0",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
+  }
+}
