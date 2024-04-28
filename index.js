@@ -1,4 +1,9 @@
-const { Users, questions_and_options } = require("./models");
+const {
+  Users,
+  questions_and_options,
+  students,
+  teachers,
+} = require("./models");
 const express = require("express");
 const app = express();
 
@@ -218,6 +223,230 @@ app.delete("/questions/:id", async (req, res) => {
     }
 
     await question.destroy();
+
+    res.status(204).json();
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post("/students", async (req, res) => {
+  try {
+    const { full_name, email, username, password, phoneNumber } = req.body;
+
+    const newStudent = await students.create({
+      full_name,
+      email,
+      username,
+      password,
+      phoneNumber,
+    });
+
+    res.status(201).json(newStudent);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get("/students", async (req, res) => {
+  try {
+    const allStudents = await students.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password", "deletedAt"],
+      },
+    });
+
+    let students = allStudents
+      .map((student) => student.dataValues)
+      .map((student) => {
+        return {
+          id: student.id,
+          full_name: student.full_name,
+          email: student.email,
+          username: student.username,
+          phoneNumber: student.phoneNumber,
+        };
+      });
+
+    res.status(200).json({ students, status: true });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get("/students/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const student = await students.findByPk(id, {
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password", "deletedAt"],
+      },
+    });
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    res.status(200).json(student);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.put("/students/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { full_name, email, username, password, phoneNumber } = req.body;
+
+    const student = await students.findByPk(id);
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    student.full_name = full_name;
+    student.email = email;
+    student.username = username;
+    student.password = password;
+    student.phoneNumber = phoneNumber;
+
+    await student.save();
+
+    res.status(200).json(student);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete("/students/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const student = await students.findByPk(id);
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    await student.destroy();
+
+    res.status(204).json();
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.post("/teachers", async (req, res) => {
+  try {
+    const { full_name, email, username, password, phoneNumber } = req.body;
+
+    const newTeacher = await teachers.create({
+      full_name,
+      email,
+      username,
+      password,
+      phoneNumber,
+    });
+
+    res.status(201).json(newTeacher);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get("/teachers", async (req, res) => {
+  try {
+    const allTeachers = await teachers.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password", "deletedAt"],
+      },
+    });
+
+    let teachers = allTeachers
+      .map((teacher) => teacher.dataValues)
+      .map((teacher) => {
+        return {
+          id: teacher.id,
+          full_name: teacher.full_name,
+          email: teacher.email,
+          username: teacher.username,
+          phoneNumber: teacher.phoneNumber,
+        };
+      });
+
+    res.status(200).json({ teachers, status: true });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get("/teachers/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const teacher = await teachers.findByPk(id, {
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password", "deletedAt"],
+      },
+    });
+
+    if (!teacher) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+
+    res.status(200).json(teacher);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.put("/teachers/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { full_name, email, username, password, phoneNumber } = req.body;
+
+    const teacher = await teachers.findByPk(id);
+
+    if (!teacher) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+
+    teacher.full_name = full_name;
+    teacher.email = email;
+    teacher.username = username;
+    teacher.password = password;
+    teacher.phoneNumber = phoneNumber;
+
+    await teacher.save();
+
+    res.status(200).json(teacher);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.delete("/teachers/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const teacher = await teachers.findByPk(id);
+
+    if (!teacher) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+
+    await teacher.destroy();
 
     res.status(204).json();
   } catch (error) {

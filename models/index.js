@@ -47,19 +47,19 @@ Object.keys(db).forEach((modelName) => {
 (async () => {
   try {
     await sequelize.sync({ alter: true });
-    console.log("Models synced successfully.");
     await sequelize.authenticate();
-    console.log("Sequelize connected successfully.");
   } catch (error) {
     console.error("Error:", error);
   }
 })();
 
 db.Sequelize = Sequelize;
-db.users = require("./users")(sequelize, Sequelize);
+db.Users = require("./users")(sequelize, Sequelize);
 db.questions_and_options = require("./question_and_options")(
   sequelize,
   Sequelize
 );
+db.students = require("./students")(sequelize, Sequelize);
+db.teachers = require("./teachers")(sequelize, Sequelize);
 
 module.exports = db;
